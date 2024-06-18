@@ -2,9 +2,9 @@
 
 setFanSpeed () {
     echo "Fan speed being set to $1%"
-    nvidia-settings -a [gpu:0]/GPUFanControlState=1
-    nvidia-settings -a [fan:0]/GPUTargetFanSpeed=$1
-    nvidia-settings -a [fan:1]/GPUTargetFanSpeed=$1
+    DISPLAY=:0 XAUTHORITY=/run/user/1000/gdm/Xauthority nvidia-settings -a [gpu:0]/GPUFanControlState=1
+    DISPLAY=:0 XAUTHORITY=/run/user/1000/gdm/Xauthority nvidia-settings -a [fan:0]/GPUTargetFanSpeed=$1
+    DISPLAY=:0 XAUTHORITY=/run/user/1000/gdm/Xauthority nvidia-settings -a [fan:1]/GPUTargetFanSpeed=$1
 }
 
 while true; do
