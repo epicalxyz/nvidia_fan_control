@@ -1,8 +1,11 @@
 [Unit]
-Description=Control Nvidia graphics fan.
+Description=Control Nvidia graphics fan
+After=network.target
 
 [Service]
-ExecStartPre=/bin/sleep 20
+Type=simple
+User=root
+Group=root
 ExecStart=/usr/bin/nvidia_fan_control
 Restart=always
 
