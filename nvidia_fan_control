@@ -1,41 +1,45 @@
 #!/bin/bash
 
 setFanSpeed () {
-    echo "Fan speed being set to $1%"
-    DISPLAY=:0 XAUTHORITY=/run/user/1000/gdm/Xauthority nvidia-settings -a [gpu:0]/GPUFanControlState=1
-    DISPLAY=:0 XAUTHORITY=/run/user/1000/gdm/Xauthority nvidia-settings -a [fan:0]/GPUTargetFanSpeed=$1
-    DISPLAY=:0 XAUTHORITY=/run/user/1000/gdm/Xauthority nvidia-settings -a [fan:1]/GPUTargetFanSpeed=$1
+    local speed=$1
+    if (( speed < 40 )); then
+        speed=40
+    fi
+    echo "Fan speed being set to ${speed}%"
+    nvidia-settings -a [gpu:0]/GPUFanControlState=1 --display=0
+    nvidia-settings -a [fan:0]/GPUTargetFanSpeed=${speed} --display=0
+    nvidia-settings -a [fan:1]/GPUTargetFanSpeed=${speed} --display=0
 }
 
 while true; do
-    temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)
-    echo "Reading temperature is $tempºC"
-    if [[ "$temp" -ge 75 ]]; then
+    temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)
+    echo "Reading temperature is ${temp}ºC"
+    if [[ "${temp}" -ge 75 ]]; then
         setFanSpeed 100
-    elif [[ "$temp" -ge 74 ]]; then
+    elif [[ "${temp}" -ge 74 ]]; then
         setFanSpeed 97
-    elif [[ "$temp" -ge 72 ]]; then
+    elif [[ "${temp}" -ge 72 ]]; then
         setFanSpeed 95
-    elif [[ "$temp" -ge 70 ]]; then
+    elif [[ "${temp}" -ge 70 ]]; then
         setFanSpeed 90
-    elif [[ "$temp" -ge 69 ]]; then
+    elif [[ "${temp}" -ge 69 ]]; then
         setFanSpeed 87
-    elif [[ "$temp" -ge 67 ]]; then
+    elif [[ "${temp}" -ge 67 ]]; then
         setFanSpeed 85
-    elif [[ "$temp" -ge 65 ]]; then
+    elif [[ "${temp}" -ge 65 ]]; then
         setFanSpeed 80
-    elif [[ "$temp" -ge 64 ]]; then
+    elif [[ "${temp}" -ge 64 ]]; then
         setFanSpeed 76
-    elif [[ "$temp" -ge 62 ]]; then
+    elif [[ "${temp}" -ge 62 ]]; then
         setFanSpeed 74
-    elif [[ "$temp" -ge 60 ]]; then
+    elif [[ "${temp}" -ge 60 ]]; then
         setFanSpeed 70
-    elif [[ "$temp" -ge 50 ]]; then
+    elif [[ "${temp}" -ge 50 ]]; then
         setFanSpeed 65
-    elif [[ "$temp" -ge 44 ]]; then
-        setFanSpeed 50
+    elif [[ "${temp}" -ge 40 ]]; then
+        setFanSpeed 40
     else
-        setFanSpeed 40 # Minimum is 30
+        setFanSpeed 40  # Set to minimum valid speed
     fi
 
     sleep 5
