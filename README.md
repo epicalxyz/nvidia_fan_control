@@ -1,6 +1,24 @@
-# nvidia_fan_control
-[nan0s7/nfancurve](https://github.com/nan0s7/nfancurve) is great! But I couldn't easily get it working on my headless machine...
+## Nvidia Fan Control
 
-# Tested with:
+This is the easiest way to control GPU fans. Set and forget.
 
-Fedora 40 Workstation with Nvidia 3060
+### Install
+
+```bash
+sudo chmod +x install_nvidia_fan_control.sh
+
+sh install_nvidia_fan_control.sh
+```
+
+### Check if its running:
+
+```bash
+sudo systemctl status nvidia_fan_control.service
+```
+
+### Tested with:
+
+|OS|GPU|
+|-:|-:|
+|Fedora 40 Workstation|Nvidia RTX 3060 12GB|
+|Nobara 39|Nvidia RTX 3060 12GB|
